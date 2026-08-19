@@ -26,22 +26,16 @@ def show_hdr(img, ax=None, mode="log", lo=1, hi=99.5, title=None,
     ax.set_axis_off()
     return ax
 
-def plot_examples(imgs, n_rows, n_cols, random_seed=0):
+def plot_examples(imgs, n_rows, n_cols, random_seed=0, **kwargs):
     n_samples = n_rows * n_cols
     rng = np.random.default_rng(random_seed)
     idx = rng.choice(len(imgs), size=n_samples, replace=False)
-    
-    fig, axes = plt.subplots(
-        n_rows, 
-        n_cols, 
-        figsize=(3 * n_cols, 3 * n_rows)
-    )
 
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=(3 * n_cols, 3 * n_rows))
     axes = np.atleast_2d(axes)
 
     for ax, i in zip(axes.flat[:n_samples], idx):
-        img = imgs[i, :, :]
-        show_hdr(img, ax=ax)
+        show_hdr(imgs[i, :, :], ax=ax, **kwargs)
 
     for ax in axes.flat[n_samples:]:
         ax.axis("off")
