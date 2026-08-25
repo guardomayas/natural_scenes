@@ -38,6 +38,13 @@ def scale_luminance(img, percentile_scale=99, clip=True, eps=1e-8):
 
     return img.astype(np.float32)
 
+def log_image(path, eps=1.0):
+    """Log-luminance. Percentile scaling is redundant here: dividing by a
+    scalar becomes an additive constant under log, and per-patch mean
+    subtraction removes it anyway."""
+    raw = load_vanhateren_raw(path)
+    return np.log(raw + eps)
+
 
 ## Processing utils
 ## random crops
@@ -47,5 +54,5 @@ def random_crop(img, rng, crop_hw=(50, 50)):
     crop_h, crop_w = crop_hw
     y0 = rng.integers(0, H - crop_h + 1)
     x0 = rng.integers(0, W - crop_w + 1)
-    return img[y0:y0+crop_h, x0:x0+crop_w]
+    return img[y0:y0+crop_h, x0:x0+crop_w].copy()
 
